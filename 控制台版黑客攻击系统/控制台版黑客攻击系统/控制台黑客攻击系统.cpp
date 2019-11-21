@@ -1,7 +1,13 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
+
+
 using namespace std;
+
+#define COLS  40    //终端宽度
+#define LINES  15   //终端高度
+
 /*
 	1.网站404攻击
 	2.网站篡改攻击
@@ -10,15 +16,26 @@ using namespace std;
 	5.服务器重启攻击
 */
 
-//功能菜单函数
-void Menu(void) {
-	system("cls");//控制台清理
-	std::cout << "1.网站404攻击" << std::endl;
-	std::cout << "2.网站篡改攻击" << std::endl;
-	std::cout << "3.查看攻击记录" << std::endl;
-	std::cout << "4.网站攻击修复" << std::endl;
-	std::cout << "5.退出" << std::endl;
+//初始化界面函数
+void Initialization() {
+	//设置控制台终端大小
+	char tmd[128];
+	sprintf(tmd, "mode con cols=%d lines=%d", COLS, LINES);
+	system(tmd);
 }
+
+//居中显示(string 标题),功能是传一个字符串,让字符串居中显示
+void Center_display(string Title) {
+	int Left_space_number = (COLS - Title.length()) / 2;//如(40-10)/2=15空格
+	//循环打印menu[]数组,i表示下标,i++,将字符串一组一组打印出来
+		//循环打印空格
+		for (int i = 0; i < Left_space_number; i++) {
+			cout << " ";
+		}
+		cout << Title << endl;//输出字符串
+}
+
+
 
 //登陆函数
 void Landing() {
@@ -36,7 +53,7 @@ void Landing() {
 
 			//优化权限判断
 		if (name == "54hk" && Password == "123456") {
-			Menu();
+			//Menu();
 			break;
 		}
 		else {
@@ -46,12 +63,57 @@ void Landing() {
 	}
 }
 
+//功能菜单函数,菜单居中显示
+void Menu(void) {
+	/*
+	system("cls");//控制台清理
+	std::cout << "1.网站404攻击" << std::endl;
+	std::cout << "2.网站篡改攻击" << std::endl;
+	std::cout << "3.查看攻击记录" << std::endl;
+	std::cout << "4.网站攻击修复" << std::endl;
+	std::cout << "5.退出" << std::endl;
+	*/
+	string menu[]{
+	"1.网站404攻击",
+	"2.网站篡改攻击",
+	"3.查看攻击记录",
+	"4.网站攻击修复",
+	"5.退出"
+	};
+	//计算菜单项的最大长度
+	int max = 0;
+	//菜单个数=menu的总空间/一个元素的空间
+	int menu_number = sizeof(menu) / sizeof(menu[0]);
+	for (int i = 0; i < menu_number; i++) {
+		if (menu[i].length() > max) {
+			//max=menu中最长字符串的长度
+			max = menu[i].length();
+		}
+	}
+	//左空格数=(终端宽度-memu中字符串最长长度)/2
+	int Left_space_number = (COLS - max )/ 2;//如(40-10)/2=15空格
+
+	system("cls");
+	Center_display("-----黑客攻击系统-----");
+
+	//循环打印menu[]数组,i表示下标,i++,将字符串一组一组打印出来
+	for (int i = 0; i < menu_number; i++) {
+		//循环打印空格
+		for (int i = 0; i < Left_space_number; i++) {
+			cout << " ";
+		}
+		cout << menu[i] << endl;//输出字符串
+	}
+
+}
+
 //输入功能编号的函数
 int Enter_function_number() {
 	int Serial_number = 0;//编号
 	while (1) {
+		//system("cls");
 		Menu();
-		cout << "请输入功能编号:";
+		//cout << "请输入功能编号:";
 		cin >> Serial_number;//用户输入编号
 		if (cin.fail()) {
 			cin.clear();//清掉错误标记
@@ -94,8 +156,8 @@ void Website_attack_repair() {
 	system("pause");
 }
 
-
 int main(void) {
+	Initialization();
 	Landing();
 
 	while (1) {
