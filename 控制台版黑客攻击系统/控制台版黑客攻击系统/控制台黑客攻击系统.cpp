@@ -1,7 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
-
+#include <conio.h>//getch();函数的头文件
 
 using namespace std;
 
@@ -35,26 +35,40 @@ void Center_display(string Title) {
 		cout << Title << endl;//输出字符串
 }
 
-
+//隐藏密码的函数(传的密码,密码的长度)
+void Hide_password(char Password[],int size) {
+	char c;
+	int i = 0;
+	while (1) {
+		c=_getch();//不显示,如果读到回车符,返回'\r'
+		if (c == '\r') { 
+			Password[i] = 0;//把Password数组当字符串,遇回车,保存一个结束符;
+			break; }//跳出循环;
+		Password[i++] = c; cout << "*";
+	}
+	cout << "\n";
+}
 
 //登陆函数
 void Landing() {
 	//char name;
 	//int Password;
 	string  name;//优化,string 字符串的账号和密码;
-	string  Password;
+	char  Password[32];
 	while (1) {
 		cout << "请输入账号" << endl;
 		cin >> name;//让用户输入账号保存到name中
 
 		cout << "请输入密码" << endl;
-		cin >> Password;//让用户输入密码保存到Password中
+		//cin >> Password;//让用户输入密码保存到Password中
+		Hide_password(Password, sizeof(Password));
+		
 
-
-			//优化权限判断
-		if (name == "54hk" && Password == "123456") {
+			//优化权限判断  //strcmp(Password,"123456")一样的话就==0;
+		if (name == "54hk" && !strcmp(Password,"123456")) {
 			//Menu();
-			break;
+			//break;
+			return;
 		}
 		else {
 			cout << "用户名或密码输入错误!\n";
@@ -84,7 +98,7 @@ void Menu(void) {
 	int max = 0;
 	//菜单个数=menu的总空间/一个元素的空间
 	int menu_number = sizeof(menu) / sizeof(menu[0]);
-	for (int i = 0; i < menu_number; i++) {
+	for (int i = 0; i < menu_number; i++) {//比较字符串的长度,长的一方赋值给max
 		if (menu[i].length() > max) {
 			//max=menu中最长字符串的长度
 			max = menu[i].length();
@@ -130,8 +144,20 @@ int Enter_function_number() {
 
 //1.网站404攻击,实现
 void attack404() {
+	
+
 	system("cls");
-	cout << "网站404攻击\n";
+	Center_display("-----网站404攻击-----");
+	cout << "请输入准备攻击的id:";
+	
+
+	//int hk_404(char *id, char *response) ;
+	//cout << "网站404攻击\n";
+
+
+	//攻击结果转换为GBK编码
+	//string Returned_string = UTF8ToGBK(Response_result);
+	//cout << Returned_string;
 	system("pause");
 }
 
